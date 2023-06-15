@@ -1,26 +1,51 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { Provider } from "react-redux";
+import Root from "./router/Root";
+import Main from "./router/Main";
+import Authentication from "./router/Authentication";
+import Cooking from "./router/Cooking";
+import Favorite from "./router/Favorite";
+import Error from "./router/Error";
+import RecipeItem from "./components/recipes/RecipeItem";
+import { store } from "./store/store";
 
-function App() {
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Root />,
+    errorElement: <Error />,
+    children: [
+      {
+        index: true,
+        element: <Main />,
+      },
+      {
+        path: "recipe/:recipeId",
+        element: <RecipeItem />,
+      },
+      {
+        path: "favorite",
+        element: <Favorite />,
+      },
+      {
+        path: "start-cooking",
+        element: <Cooking />,
+      },
+      {
+        path: "login",
+        element: <Authentication />,
+      },
+    ],
+  },
+]);
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
   );
-}
+};
 
 export default App;
